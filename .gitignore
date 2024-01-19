@@ -37,7 +37,7 @@ yarn-error.log*
 /client/.env
 /server/.env
 /*/.env
-
+.env
 
 
 # vercel
