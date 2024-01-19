@@ -9,6 +9,10 @@ const nextConfig = {
             {
                 hostname: "localhost",
                 protocol: "http",
+            },
+            {
+                hostname: "chatin-server.onrender.com",
+                protocol: "https",
             }
         ]
     }
