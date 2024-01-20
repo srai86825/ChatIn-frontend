@@ -1,9 +1,11 @@
 import { useGlobalContext } from "@/context/StateContext";
 import { reducerCases } from "@/context/constants";
 import { GET_CALL_TOKEN } from "@/utils/ApiRoutes";
+import formatTime from "@/utils/formatTime";
 import axios from "axios";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import { BsMic, BsMicMute } from "react-icons/bs";
 import { MdCallEnd } from "react-icons/md";
 
 function Container({ data }) {
@@ -16,12 +18,14 @@ function Container({ data }) {
   const [zgVar, setZgVar] = useState(undefined);
   const [localstream, setLocalstream] = useState(undefined);
   const [publishstream, setPublishstream] = useState(undefined);
+  const [callDuration, setCallDuration] = useState(0);
+  const [isMuted, setIsMuted] = useState(false);
 
   useEffect(() => {
     if (data && data.type === "out-going") {
       socket.current.on("accepted-call", () => {
         setCallAccepted(true);
-        console.log("The reciver accepted the call....")
+        console.log("The reciver accepted the call....");
       });
     } else {
       setTimeout(() => {
@@ -34,6 +38,7 @@ function Container({ data }) {
   }, [data]);
 
   useEffect(() => {
+    let interval;
     if (callAccepted) {
       const getToken = async () => {
         try {
@@ -44,8 +49,15 @@ function Container({ data }) {
         } catch (error) {
           console.log("error generating token: ", error);
         }
+        interval = setInterval(() => {
+          setCallDuration((p) => p + 1);
+        }, 1000);
       };
       getToken();
+
+      return () => {
+        clearInterval(interval);
+      };
     }
   }, [callAccepted]);
 
@@ -83,10 +95,10 @@ function Container({ data }) {
                   })
                     .then((stream) => {
                       vd.srcObject = stream;
-                      console.log(
-                        " HEREEEE video playing and stream: ",
-                        stream
-                      );
+                      // console.log(
+                      //   " HEREEEE video playing and stream: ",
+                      //   stream
+                      // );
                     })
                     .catch((err) => {
                       console.log(
@@ -115,7 +127,7 @@ function Container({ data }) {
               { userUpdate: true }
             );
 
-            const localStream = await zg.createStream({
+            const localstream = await zg.createStream({
               camera: {
                 audio: true,
                 video: data.callType === "video" ? true : false,
@@ -137,16 +149,16 @@ function Container({ data }) {
             localVideo.appendChild(videoElement);
 
             const td = document.getElementById("video-local-zego");
-            td.srcObject = localStream;
+            td.srcObject = localstream;
             const streamID = "123" + Date.now();
             setPublishstream(streamID);
-            setLocalstream(localStream);
-            zg.startPublishingStream(streamID, localStream);
+            setLocalstream(localstream);
+            zg.startPublishingStream(streamID, localstream);
 
-            console.log("LocalStream: " + localStream);
+            // console.log("setting LocalStream in startcall: ", localstream);
           } catch (e) {
-            console.log("Error: " , e);
-            console.error("Error: " , e);
+            console.log("Error: ", e);
+            console.error("Error: ", e);
           }
         }
       );
@@ -160,6 +172,25 @@ function Container({ data }) {
       }
     }
   }, [token]);
+
+  useEffect(() => {
+    const muteUnmute = async () => {
+      if (isMuted && callAccepted) {
+        // console.log("The localstream is: ",localstream)
+        // await localstream.setAudioDevice("none");
+      } else if (callAccepted && publishstream) {
+        // zgVar.startPublishingStream(publishstream, localstream);
+      } else {
+        console.log(
+          "Unable to mute/unmute: localstream",
+          localstream,
+          "publishstream",
+          publishstream
+        );
+      }
+    };
+    muteUnmute();
+  }, [isMuted]);
 
   const handleEndCall = () => {
     if (zgVar && localstream && publishstream) {
@@ -181,12 +212,20 @@ function Container({ data }) {
     dispatch({ type: reducerCases.SET_END_CALL });
   };
 
+  const handleMuteCall = () => {
+    // setIsMuted((p) => !p);
+    console.log("mute feature is not updated yet...");
+  };
+
   return (
     <div className="border-conversation-border border-l w-full bg-conversation-panel-background flex flex-col h-[100vh] overflow-hidden justify-center text-white">
       <div className="flex flex-col gap-3 items-center">
         <span className="text-5xl">{data.name}</span>
         <span id="outgoing-call-status" className="text-lg">
           {callAccepted ? "Ongoing call" : "Calling..."}
+        </span>
+        <span className="text-md text-white my-4">
+          {formatTime(callDuration)}
         </span>
         {(!callAccepted || data.callType === "voice") && (
           <div className="my-24">
@@ -207,11 +246,31 @@ function Container({ data }) {
             id="local-audio"
           ></div>
         </div>
-        <div
-          className="h-16 w-16 rounded-full bg-red-600 flex flex-col justify-center items-center"
-          onClick={handleEndCall}
-        >
-          <MdCallEnd className="text-4xl cursor-pointer" title="end call" />
+        <div className="flex flex-row gap-12">
+          <div
+            className="h-16 w-16 rounded-full bg-white flex flex-col justify-center items-center"
+            onClick={handleMuteCall}
+          >
+            {isMuted ? (
+              <BsMicMute
+                className="text-4xl text-black cursor-pointer"
+                title="mute"
+                aria-disabled
+              />
+            ) : (
+              <BsMic
+                className="text-4xl text-black cursor-pointer"
+                title="unmute"
+                aria-disabled
+              />
+            )}
+          </div>
+          <div
+            className="h-16 w-16 rounded-full bg-red-600 flex flex-col justify-center items-center"
+            onClick={handleEndCall}
+          >
+            <MdCallEnd className="text-4xl cursor-pointer" title="end call" />
+          </div>
         </div>
       </div>
     </div>

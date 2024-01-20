@@ -20,11 +20,14 @@ function VoiceMessage({ msg }) {
   const waveFormRef = useRef(null);
   const waveform = useRef(null);
 
+  //represents unique id, cuz there can be multiple waveforms in a chat
+  const uid="waveformDiv"+Date.now().toString();
+
   useEffect(() => {
     if (!waveform.current) {
       waveform.current = WaveSurfer.create({
         // container: waveFormRef.current,
-        container: document.getElementById("waveformDiv"),
+        container: document.getElementById(uid),
         waveColor: "#ccc",
         progressColor: "#4a9eff",
         cursorColor: "#7ae3c3",
@@ -106,7 +109,7 @@ function VoiceMessage({ msg }) {
         )}
       </div>
       <div className="flex relative">
-        <div id="waveformDiv" className="w-60" ref={waveFormRef} />
+        <div id={uid} className="w-60" ref={waveFormRef} />
         <div className="text-bubble-meta flex text-[11px] pt-1 justify-between absolute bottom-[-22px] w-full">
           <span>
             {formatTime(isPlaying ? currentPlaybackTime : totalDuration)}

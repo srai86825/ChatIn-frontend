@@ -4,7 +4,6 @@ import { MdSend } from "react-icons/md";
 import { BsEmojiSmile } from "react-icons/bs";
 import { FaMicrophone } from "react-icons/fa";
 import { ImAttachment } from "react-icons/im";
-import dynamic from "next/dynamic";
 
 import { useGlobalContext } from "@/context/StateContext";
 import { ADD_IMAGE_MESSAGE_ROUTE, ADD_MESSAGE_ROUTE } from "@/utils/ApiRoutes";
@@ -12,7 +11,6 @@ import { reducerCases } from "@/context/constants";
 import EmojiPicker from "emoji-picker-react";
 import { PhotoPicker } from "../common";
 import { CaptureAudio } from "../common";
-// const CaptureAudio=dynamic(()=>import("../common/CaptureAudio"),{ssr:false})
 
 function MessageBar() {
   const {
@@ -41,7 +39,7 @@ function MessageBar() {
     //   alert("Only images are allowed")
     //   return;
     // }
-    console.log("Photo send request")
+    // console.log("Photo send request")
     const formData = new FormData();
     formData.append("image", file);
     const response = await axios.post(ADD_IMAGE_MESSAGE_ROUTE, formData, {

@@ -18,21 +18,21 @@ function Avatar({ type, image, setImage }) {
       name: "Take Photo",
       callback: () => {
         setshowCamera(true);
-        console.log("Take Photo initiated");
+        // console.log("Take Photo initiated");
       },
     },
     {
       name: "Change from Library",
       callback: () => {
         setShowPhotoLibrary(true);
-        console.log("Change from Library called");
+        // console.log("Change from Library called");
       },
     },
     {
       name: "Upload Photo",
       callback: () => {
         setShowPhotoPicker(true);
-        console.log("Upload Photo called", showPhotoPicker);
+        // console.log("Upload Photo called", showPhotoPicker);
       },
     },
     {
@@ -85,7 +85,12 @@ function Avatar({ type, image, setImage }) {
         )}
         {type === "lg" && (
           <div className="relative h-14 w-14">
-            <Image src={image} alt="avatar" className="rounded-full" fill />
+            <Image
+              src={image}
+              alt="avatar"
+              className="rounded-full"
+              fill
+            />
           </div>
         )}
         {type === "xl" && (

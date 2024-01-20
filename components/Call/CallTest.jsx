@@ -75,17 +75,12 @@ function Container({ data }) {
                   if (rmVideo) {
                     rmVideo.appendChild(vd);
                   }
-                  console.log("REACHING HEREEEEEE");
                   zg.startPlayingStream(streamList[0].streamID, {
                     audio: true,
                     video: true,
                   })
                     .then((stream) => {
                       vd.srcObject = stream;
-                      console.log(
-                        " HEREEEE video playing and stream: ",
-                        stream
-                      );
                     })
                     .catch((err) => {
                       console.log(
@@ -139,8 +134,6 @@ function Container({ data }) {
             setPublishstream(streamID);
             setLocalstream(localstream);
             zg.startPublishingStream(streamID, localstream);
-
-            console.log("LocalStream: " + localstream);
           } catch (e) {
             console.log("Error: " + e);
             console.error("Error: " + e);
@@ -200,10 +193,6 @@ function Container({ data }) {
         )}
         <div className="my-5 relative" id="remote-video">
           <div className="absolute bottom-5 right-5" id="local-audio">
-            {console.log(
-              "remote-video",
-              document.getElementById("remote-video")
-            )}
           </div>
         </div>
         <div

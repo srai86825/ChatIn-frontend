@@ -8,7 +8,7 @@ function VideoCall() {
   } = useGlobalContext();
 
   useEffect(() => {
-    console.log("VideoCall",videoCall)
+    // console.log("VideoCall",videoCall)
     if (videoCall.callType === "video" && videoCall.type!=="in-coming") {
       socket.current.emit("outgoing-video-call", {
         to: currentChatUser.id,

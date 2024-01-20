@@ -11,7 +11,7 @@ function IncomingVideoCall() {
   } = useGlobalContext();
 
   const handleAcceptCall = async () => {
-    console.log("handle accept",incomingVideoCall.from)
+    // console.log("handle accept",incomingVideoCall.from)
     await dispatch({
       type: reducerCases.SET_VIDEO_CALL,
       videoCall: {
@@ -22,7 +22,7 @@ function IncomingVideoCall() {
     socket.current.emit("accept-call", {
       id: incomingVideoCall.id,
     });
-    console.log("emitting socket id: ",incomingVideoCall.id)
+    // console.log("emitting socket id: ",incomingVideoCall.id)
     dispatch({
       type: reducerCases.SET_INCOMING_VIDEO_CALL,
       incomingVideoCall: undefined,

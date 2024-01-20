@@ -58,7 +58,7 @@ const LoginPage = () => {
 
       if (email) {
         const { data } = await axios.post(CHECK_USER_ROUTE, { email });
-        console.log(data);
+        // console.log(data);
 
         if (!data.status) {
           await dispatch({ type: reducerCases.SET_NEW_USER, isNewUser: true });
@@ -83,12 +83,12 @@ const LoginPage = () => {
               id: data.data.id,
             },
           });
-          console.log(
-            "userInfo set at login",
-            userInfo,
-            "but data: ",
-            data.data
-          );
+          // console.log(
+          //   "userInfo set at login",
+          //   userInfo,
+          //   "but data: ",
+          //   data.data
+          // );
           router.push("/");
         }
       }

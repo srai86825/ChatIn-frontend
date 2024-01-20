@@ -11,7 +11,7 @@ function IncomingCall() {
   } = useGlobalContext();
 
   const handleAcceptCall = async () => {
-    console.log("handle accept",incomingVoiceCall.from)
+    // console.log("handle accept",incomingVoiceCall.from)
     await dispatch({
       type: reducerCases.SET_VOICE_CALL,
       voiceCall: {

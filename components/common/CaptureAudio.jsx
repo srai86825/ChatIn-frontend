@@ -117,7 +117,7 @@ function CaptureAudio({ setShowVoiceRecorder }) {
   };
   const handleStopRecording = () => {
     if (mediaRecorderRef.current && isRecording) {
-      console.log("stop recording");
+      // console.log("stop recording");
       mediaRecorderRef.current.stop();
       setIsRecording(false);
       waveForm.stop();
@@ -152,7 +152,7 @@ function CaptureAudio({ setShowVoiceRecorder }) {
   };
 
   const sendRecording = async () => {
-    console.log("audio send request");
+    // console.log("audio send request");
     const formData = new FormData();
     formData.append("audio", renderedAudio);
     const response = await axios.post(ADD_AUDIO_MESSAGE_ROUTE, formData, {
@@ -179,7 +179,8 @@ function CaptureAudio({ setShowVoiceRecorder }) {
         },
       });
     }
-    // setShowPhotoPicker(false);
+
+    setShowVoiceRecorder(false);
   };
 
   return (

@@ -56,8 +56,8 @@ const App = () => {
   useEffect(() => {
     if (socket.current && !socketEvent) {
       socket.current.on("rcv-msg", (data) => {
-        console.log(socket.current);
-        console.log("message received", data);
+        // console.log(socket.current);
+        // console.log("message received", data);
         dispatch({
           type: reducerCases.ADD_MESSAGE,
           newMessage: {
@@ -67,8 +67,7 @@ const App = () => {
       });
 
       socket.current.on("rcv-voice-call", (data) => {
-        console.log("recieving voice call", data);
-        console.log("voiceCall Data reiceived", data);
+        console.log("recieving voice call");
         dispatch({
           type: reducerCases.SET_INCOMING_VOICE_CALL,
           incomingVoiceCall: {
@@ -80,7 +79,7 @@ const App = () => {
       });
 
       socket.current.on("rcv-video-call", (data) => {
-        console.log("recieving video call", data);
+        console.log("recieving video call");
         dispatch({
           type: reducerCases.SET_INCOMING_VIDEO_CALL,
           incomingVideoCall: {
@@ -91,12 +90,16 @@ const App = () => {
         });
       });
 
-      socket.current.on("rejected-voice-call", () => {       
-          dispatch({ type: reducerCases.SET_END_CALL });
+      socket.current.on("rejected-voice-call", () => {
+        dispatch({ type: reducerCases.SET_END_CALL });
       });
 
       socket.current.on("rejected-video-call", () => {
         dispatch({ type: reducerCases.SET_END_CALL });
+      });
+
+      socket.current.on("online-users", ({ onlineUsers }) => {
+        dispatch({ type: reducerCases.SET_ONLINE_USERS, onlineUsers });
       });
 
       setSocketEvent(true);

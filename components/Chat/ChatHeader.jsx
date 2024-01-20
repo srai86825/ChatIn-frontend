@@ -8,36 +8,35 @@ import { useGlobalContext } from "@/context/StateContext";
 import { reducerCases } from "@/context/constants";
 
 function ChatHeader() {
-
   const {
-    state: { currentChatUser },
+    state: { currentChatUser, onlineUsers },
     dispatch,
   } = useGlobalContext();
 
-  const handleVoiceCall=()=>{
+  const handleVoiceCall = () => {
     // console.log("socket at video call",socket.current);
     dispatch({
-      type:reducerCases.SET_VOICE_CALL,
-      voiceCall:{
+      type: reducerCases.SET_VOICE_CALL,
+      voiceCall: {
         ...currentChatUser,
-        type:"out-going",
-        callType:"voice",
-        roomId:Date.now(),
-      }
-    })
-  }
+        type: "out-going",
+        callType: "voice",
+        roomId: Date.now(),
+      },
+    });
+  };
 
-  const handleVideoCall=()=>{
+  const handleVideoCall = () => {
     dispatch({
-      type:reducerCases.SET_VIDEO_CALL,
-      videoCall:{
+      type: reducerCases.SET_VIDEO_CALL,
+      videoCall: {
         ...currentChatUser,
-        type:"out-going",
-        callType:"video",
-        roomId:Date.now(),
-      }
-    })
-  }
+        type: "out-going",
+        callType: "video",
+        roomId: Date.now(),
+      },
+    });
+  };
 
   return (
     <div className="h-16 px-4 py-3 flex justify-between items-center bg-panel-header-background z-10">
@@ -47,12 +46,20 @@ function ChatHeader() {
           <span className="text-primary-strong">
             {currentChatUser?.name || "Unknown User"}
           </span>
-          <span className="text-secondary">online</span>
+          <span className="text-secondary">
+            {onlineUsers.includes(currentChatUser?.id) ? "online" : "offline"}
+          </span>
         </div>
       </div>
       <div className="flex gap-6 ">
-        <MdCall onClick={handleVoiceCall} className="text-panel-header-icon cursor-pointer text-xl" />
-        <IoVideocam onClick={handleVideoCall} className="text-panel-header-icon cursor-pointer" />
+        <MdCall
+          onClick={handleVoiceCall}
+          className="text-panel-header-icon cursor-pointer text-xl"
+        />
+        <IoVideocam
+          onClick={handleVideoCall}
+          className="text-panel-header-icon cursor-pointer"
+        />
         <BiSearchAlt2
           onClick={() =>
             dispatch({ type: reducerCases.MESSAGE_SEARCH_APPLIED })
